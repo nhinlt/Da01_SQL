@@ -1,0 +1,26 @@
+ /*  EX1: Query a list of CITY names from STATION for cities that have an even ID number. Print the results in any order, but exclude duplicates from the answer */
+SELECT DISTINCT CITY FROM STATION WHERE ID%2=0;
+
+ /* EX2: find the difference between the total number of CITY entries in the table and the number of distinct CITY entries in the table */
+SELECT COUNT(CITY) - COUNT( DISTINCT CITY) FROM STATION;
+
+EX3: select cast(CEILING(avg(cast(salary as float)) - avg(cast(replace(salary,0,'') as float)))as int) from EMPLOYEES;
+
+EX4: SELECT ROUND(CAST(SUM(item_count*order_occurrences)/SUM(order_occurrences) AS DECIMAL),1) AS mean FROM items_per_order;
+
+EX5 SELECT candidate_id FROM candidates WHERE skill IN ('Python', 'Tableau', 'PostgreSQL') GROUP BY candidate_id HAVING COUNT(skill) = 3 ORDER BY candidate_id;
+
+EX6: SELECT user_id, MAX(post_date::date)- MIN(post_date::date) AS days_between FROM	posts WHERE DATE_PART('year',post_date::date)=2021 GROUP BY user_id HAVINGCOUNT(post_id)>1
+
+EX7: SELECT card_name, MAX(issued_amount) - MIN(issued_amount) AS different FROM monthly_cards_issued GROUP BY card_name ORDER BY difference DESC;
+
+EX8: SELECT manufacturer, COUNT(drug) AS drug_count, SUM(cogs - total_sales) AS total_loss FROM pharmacy_sales WHERE cogs > total_sales GROUP BY manufacturer ORDER BY total_loss DESC;
+
+EX9: SELECT * FROM Cinema WHERE MOD( id, 2) = 1 AND description <> 'boring' ORDER BY rating DESC
+
+EX10: SELECT teacher_id, COUNT(DISTINCT subject_id) AS cnt FROM Teacher GROUP BY teacher_id;
+
+EX11: SELECT DISTINCT user_id, COUNT(*) as followers_count FROM Followers GROUP BY user_id ORDER BY user_id
+
+
+EX12: SELECT class FROM Courses GROUP BY class HAVING COUNT(student) >= 5;
