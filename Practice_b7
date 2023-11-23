@@ -1,0 +1,9 @@
+SELECT NAME FROM STUDENTS WHERE MARKS > 75 ORDER BY RIGHT(NAME,3), ID ASC;
+SELECT user_id , CONCAT(UPPER(SUBSTR(name,1,1)),LOWER(SUBSTR(name,2))) AS name From Users ORDER BY user_id;
+SELECT manufacturer, CONCAT( '$', ROUND(SUM(total_sales) / 1000000), ' million') AS sales_mil FROM pharmacy_sales GROUP BY manufacturer ORDER BY SUM(total_sales) DESC, manufacturer;
+SELECT EXTRACT(MONTH FROM submit_date) AS mth, product_id, ROUND(AVG(stars), 2) AS avg_stars FROM reviews GROUP BY EXTRACT(MONTH FROM submit_date), product_id ORDER BY mth, product_id;
+select tweet_id from Tweets where char_length(content) > 15;
+select activity_date as day count(distinct user_id) as active_users from Activity  where ((activity_date<='2019-07-27') and (activity_date>='2019-06-28')) group by day;
+SELECT COUNT(employee_id) as number_employee FROM employees WHERE EXTRACT(month FROM joining_date) BETWEEN 1 AND 7 AND EXTRACT(year FROM joining_date) = 2022;
+Select position("a" in first_name) as position from Worker where first_name = 'Amitabh';
+select substring(title, length(winery)+2,4) from winemag_p2 where country ="Macedonia";
