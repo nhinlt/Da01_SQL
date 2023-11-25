@@ -1,0 +1,35 @@
+--- Excercise 1: 
+
+SELECT
+SUM(CASE device_type = "laptop" then 1 else 0 end) as laptop_views,
+SUM(CASE device_type in ("tablet","phone") then 1 else 0 end) as mobile_views
+FROM viewership;
+
+--- Excercise 2: 
+
+select x, y, z, 
+case when x + y > z and x + z > y and y + z > x then 'Yes'  
+     else 'No'  
+end as triangle
+from Triangle
+
+--- Excercise 3:
+
+SELECT 
+ROUND((SUM(CASE when call_category is null or call_category = "n/a" then 1 ELSE 0 end)/COUNT(case_id))*100,1) as call_percentage
+from callers;
+
+--- Excercise 4: 
+
+ SELECT name FROM customer WHERE referee_id <> 2 OR referee_id IS NULL;
+
+--- Excercise 5: 
+SELECT 
+    survived,
+    sum(CASE WHEN pclass = 1 THEN 1 ELSE 0 END) AS first_class,
+    sum(CASE WHEN pclass = 2 THEN 1 ELSE 0 END) AS second_class,
+    sum(CASE WHEN pclass = 3 THEN 1 ELSE 0 END) AS third_class
+FROM titanic
+GROUP BY 
+    survived
+
