@@ -1,0 +1,55 @@
+Excercise 1: 
+WITH CTE AS (SELECT company_id, title,description, COUNT(job_id) AS job_count FROM job_listings GROUP BY company_id, title,description ORDER BY company_id)
+SELECT COUNT(DISTINCT company_id) AS duplicate_companies FROM cte WHERE job_count >=2;
+
+-------
+Exercise 2:
+WITH CTE_product_spend AS (SELECT category,product,SUM(spend) as total_spend,
+RANK() OVER(PARTITION BY category ORDER BY SUM(spend) DESC) AS ranking
+FROM product_spend WHERE EXTRACT( YEAR FROM transaction_date) = 2022 GROUP BY category, product)
+select category, product, total_spend from CTE_product_spend where ranking <=2 order by category, ranking;
+
+-----
+Excercise 3: 
+WITH call_records AS (SELECT policy_holder_id, COUNT(case_id) AS call_count FROM callers GROUP BY policy_holder_id HAVING COUNT(case_id) >= 3)
+SELECT COUNT(policy_holder_id) FROM call_records AS member_count;
+
+-----
+Excercise 4:
+SELECT page_id FROM pages WHERE NOT EXISTS (SELECT page_id FROM page_likes AS likes WHERE likes.page_id = pages.page_id);
+
+------
+
+Excercise 5: 
+with cte as (SELECT user_id, EXTRACT(month from event_date) as m_num from user_actions where EXTRACT(month from event_date) in (6,7))
+select m_num as month, count(*) as monthly_active_users from (SELECT user_id, m_num, RANK() over(PARTITION BY user_id order by m_num) from cte GROUP BY user_id, m_num)m where rank = 2
+GROUP BY month;
+
+----------
+Excercise 6:
+
+SELECT date_format(trans_date,'%Y-%m') as month, country, count(id) as trans_count,sum(case WHEN state = 'approved' then 1 else 0 end)as approved_count, sum(amount) as trans_total_amount, sum(case when state = 'approved' then amount else 0 end) as approved_total_amount
+from Transactions
+group by month, country;
+
+------
+Excercise 7:
+SELECT product_id, year as first_year, quantity, price 
+from Sales where (product_id, year) in ( SELECT product_id, min(year) as year from Sales  group by product_id)
+---
+Excercise 8: 
+SELECT customer_id FROM Customer GROUP BY customer_id HAVING 
+COUNT(DISTINCT product_key) = (SELECT COUNT(*) FROM Product
+----
+Excercise9: 
+
+SELECT employee_id FROM Employees WHERE salary < 30000 
+AND manager_id NOT IN (SELECT DISTINCT(employee_id) FROM Employees)
+ORDER BY employee_id;
+
+Excercise 10:
+ # Write your MySQL query statement below
+select id , count(id) as num
+from (select requester_id as id from requestaccepted union all select accepter_id from requestaccepted )
+group by id
+order by count(id) desc limit 1;
