@@ -1,0 +1,46 @@
+Exercise 1:
+
+WITH year_spend_cte AS (SELECT EXTRACT(YEAR FROM transaction_date) AS yr, product_id, spend AS curr_year_spend, LAG(spend) OVER ( PARTITION BY product_id 
+ORDER BY product_id, EXTRACT(YEAR FROM transaction_date)) AS prev_year_spend FROM user_transactions)
+SELECT yr, product_id, curr_year_spend, prev_year_spend, ROUND(100 * (curr_year_spend - prev_year_spend)/ prev_year_spend, 2) AS yoy_rate 
+FROM yearly_spend_cte;
+
+-----
+
+Excercise 2:
+
+with cte as (select *, rank() over(partition by card_name order by issue_year, issue_month) as rnk from monthly_cards_issued)
+select card_name, issued_amount from cte rnk = 1 order by issued_amount desc;
+
+------
+
+Excercise 3:
+
+with transactions_rank as (select user_id, spend, transaction_date,DENSE_RANK() OVER (PARTITION BY user_id ORDER BY transaction_date ASC) as ranking
+from transactions)
+select user_id,spend,transaction_date
+from transactions_rank where ranking = 3;
+-------
+Excercise 4
+
+with latest_transactions as ( select transaction_date,user_id,product_id,dense_rank() over (partition by user_id order by transaction_date desc) as latest_purchase
+  from user_transactions)
+select transaction_date,user_id,sum(latest_purchase) as purchase_count 
+from latest_transactions 
+where latest_purchase = 1 group by transaction_date, user_id order by transaction_date;
+
+------
+Exercise 5: 
+select user_id, tweet_date, round(avg(tweet_count) over (partition by user_id order by tweet_date rows between 2 preceding and current row), 2) as rolling_avg_3_days
+from tweets
+group by user_id, tweet_date, tweet_count;
+
+--------
+
+Excercise 7:
+WITH CTE_product_spend AS (SELECT category,product,SUM(spend) as total_spend,
+RANK() OVER(PARTITION BY category ORDER BY SUM(spend) DESC) AS ranking
+FROM product_spend WHERE EXTRACT( YEAR FROM transaction_date) = 2022 GROUP BY category, product)
+select category, product, total_spend from CTE_product_spend where ranking <=2 order by category, ranking
+
+Excercise 8:
